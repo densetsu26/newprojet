@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.gluonhq.charm.glisten.control.TextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="346.0" prefWidth="396.0" style="-fx-background-radius: 12; -fx-background-color: #DBD9D9;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Text layoutX="81.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Modifier un bateau" wrappingWidth="234.8033676147461">
+         <font>
+            <Font name="System Bold" size="25.0" />
+         </font>
+      </Text>
+      <TextField id="tf_Nom" layoutX="24.0" layoutY="88.0" />
+      <TextField id="tf_cap" layoutX="225.0" layoutY="88.0" />
+      <TextArea id="ta_Description" layoutX="24.0" layoutY="148.0" prefHeight="130.0" prefWidth="349.0" />
+      <Label layoutX="24.0" layoutY="63.0" text="Nom" />
+      <Label layoutX="225.0" layoutY="54.0" text="Capacité" />
+      <Label layoutX="24.0" layoutY="121.0" prefHeight="25.0" prefWidth="79.0" text="Description" />
+      <Button layoutX="316.0" layoutY="291.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="45.0" style="-fx-background-color: #003399;" text="OK" textFill="#f4f4f4" />
+   </children>
+</AnchorPane>

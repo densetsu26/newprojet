@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0" prefWidth="588.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tg.ucao.uut.tp.poo.applications.interfaces.mvc_tickets.TicketviewController">
+   <children>
+      <Pane layoutX="118.0" layoutY="25.0" prefHeight="46.0" prefWidth="363.0" style="-fx-background-color: #336794; -fx-background-radius: 12;">
+         <children>
+            <Text fill="#fff9f9" layoutX="81.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edition de tickets">
+               <font>
+                  <Font name="Comic Sans MS Bold" size="26.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+      <TextField id="tf_Nomclient" layoutX="111.0" layoutY="120.0" prefHeight="37.0" prefWidth="149.0" />
+      <TextField id="tf_PrenomClient" layoutX="331.0" layoutY="120.0" prefHeight="37.0" prefWidth="149.0" />
+      <ComboBox id="cb_bateau" layoutX="101.0" layoutY="229.0" prefHeight="25.0" prefWidth="385.0" />
+      <ComboBox id="cb_Siege" layoutX="115.0" layoutY="323.0" prefHeight="37.0" prefWidth="98.0" />
+      <Button id="bt_genPDF" layoutX="345.0" layoutY="323.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="149.0" text="📄 Générer pdf" textFill="#be2c2c">
+         <font>
+            <Font name="Calibri Bold" size="16.0" />
+         </font>
+      </Button>
+      <Label layoutX="118.0" layoutY="96.0" text="Nom" />
+      <Label layoutX="331.0" layoutY="87.0" text="Prénom" />
+      <Label layoutX="118.0" layoutY="182.0" text="Voyages" />
+      <Label layoutX="118.0" layoutY="293.0" text="Numéro de siège" />
+   </children>
+</AnchorPane>

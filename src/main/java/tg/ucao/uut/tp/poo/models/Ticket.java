@@ -7,20 +7,23 @@ package tg.ucao.uut.tp.poo.models;
 
 
 
+import tg.ucao.uut.tp.poo.dao.Column;
+
 /**
  *
  * @author user
  */
 public class Ticket extends BaseModel {
-
+    @Column("id")
     private int numero;
+    @Column("numSiege")
     private int numSiege;
     private String nomClient; 
     private String prenomClient;
-    private Bateau bateau;
+    private Voyage voyage ;
 
      public Ticket(String nom,String prenom,Bateau bateau,int s){
-        this.bateau=bateau;
+        
         this.id++;
         this.nomClient=nom;
         this.prenomClient=prenom;
@@ -39,9 +42,7 @@ public class Ticket extends BaseModel {
         return prenomClient;
     }
 
-    public Bateau getBateau() {
-        return bateau;
-    }
+  
 
     public void setNomClient(String nomClient) {
         this.nomClient = nomClient;
@@ -70,9 +71,7 @@ public class Ticket extends BaseModel {
         this.numSiege = numSiege;
     }
 
-    public void setBateau(Bateau bateau) {
-        this.bateau = bateau;
-    }
+    
 
  
 
@@ -86,6 +85,20 @@ public class Ticket extends BaseModel {
     @Override
     public Object[] toTableRow() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    /**
+     * @return the voyage
+     */
+    public Voyage getVoyage() {
+        return voyage;
+    }
+
+    /**
+     * @param voyage the voyage to set
+     */
+    public void setVoyage(Voyage voyage) {
+        this.voyage = voyage;
     }
 
 }

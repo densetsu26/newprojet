@@ -4,24 +4,26 @@
  */
 package tg.ucao.uut.tp.poo.models;
 
+import tg.ucao.uut.tp.poo.dao.Transient;
 import java.util.Objects;
 
 import tg.ucao.uut.tp.poo.dao.Column;
 
-/**
- *
- * @author macbook
- */
+
 public class Bateau extends BaseModel {
-    
-    //public final static String[] FIELDS_NAMES = new String[] { "nom", "description", "etiquette_Siege", "capacite" };
-    //public final static Class<?>[] FIELDS_CLASSES = new Class[] { String.class, String.class, String.class, Integer.class};
-    
+    @Transient()
+    public final static String[] FIELDS_NAMES = new String[] { "nom", "description", "numero_Siege", "capacite" };
+    @Transient()
+    public final static Class<?>[] FIELDS_CLASSES = new Class[] { String.class, String.class, String.class, Integer.class};
+    @Column("id")
     private String numero;
+    @Column("nom_bateau")
     private String nom;
+    @Column("description")
     private String description;
-    @Column("etiquette_Siege")
+    @Column("numero_Siege")
     private String numerotationSiege;
+    @Column("capacite")
     private Integer capacite;
 
     public Bateau() {

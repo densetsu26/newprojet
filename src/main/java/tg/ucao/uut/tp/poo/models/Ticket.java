@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package mvc_ticket.model;
+package tg.ucao.uut.tp.poo.models;
 
-import mvc_bateau.infra.model.BaseModel;
-import mvc_bateau.model.Bateau;
+
+
 
 /**
  *

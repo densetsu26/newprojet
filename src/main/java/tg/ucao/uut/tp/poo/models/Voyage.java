@@ -2,16 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package mvc_voyage.model;
+package tg.ucao.uut.tp.poo.models;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import mvc_bateau.infra.model.BaseModel;
+
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.Objects;
-import mvc_ticket.model.Ticket;
-import mvc_bateau.model.Bateau;
+
+
 
 
 /**
@@ -40,8 +40,8 @@ public class Voyage extends BaseModel{
         this.dateDebut= dateDebut;
         this.dateFin= dateFin;
         this.bateau=bateau;
-        this.heureFin=heureFin;
-        this.heureDebut=heureDebut;
+        this.heureFin= heureFin;
+        this.heureDebut= heureDebut;
         
         
     }

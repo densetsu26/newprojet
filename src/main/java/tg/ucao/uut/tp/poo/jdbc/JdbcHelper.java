@@ -17,9 +17,10 @@ public class JdbcHelper {
 
     private final static String nomHote = "localhost";
     private final static String port = "5432";
-    private final static String nomBD = "maritime";
-    private final static String userName = "adm_maritime"; 
-    private final static String password = "maritime@2025";
+    private final static String nomBD = "VoyageMaritime";
+    private final static String userName = "user"; 
+    private final static String password = "@user";
+            
     
     private Connection conn;
     

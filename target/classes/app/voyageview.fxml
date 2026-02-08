@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="voyagePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="voyagePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0" prefWidth="1000.0" style="-fx-background-color: #748B75;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Text layoutX="405.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Listes des voyages" wrappingWidth="396.8033752441406">
          <font>
@@ -19,10 +19,10 @@
       </Text>
       <DatePicker id="DateAprès" layoutX="257.0" layoutY="92.0" />
       <DatePicker id="DateAvant" layoutX="59.0" layoutY="92.0" />
-      <Button id="btAjouter" layoutX="713.0" layoutY="88.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="97.0" style="-fx-background-color: #1FC255;" text="➕ Ajouter " textFill="#085913" />
+      <Button id="btAjouter" layoutX="617.0" layoutY="88.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="97.0" style="-fx-background-color: #1FC255;" text="➕ Ajouter " textFill="#085913" />
       <Label layoutX="59.0" layoutY="61.0" prefHeight="25.0" prefWidth="49.0" text="Avant" />
       <Label layoutX="257.0" layoutY="65.0" text="Après" />
-      <TableView id="Tableau_voyage" layoutX="31.0" layoutY="127.0" prefHeight="350.0" prefWidth="1000.0">
+      <TableView id="Tableau_voyage" layoutX="31.0" layoutY="127.0" prefHeight="350.0" prefWidth="923.0">
          <columns>
             <TableColumn id="col_ID" prefWidth="77.33332824707031" text="ID" />
             <TableColumn id="col_Nom" prefWidth="73.3333740234375" text="Nom" />
@@ -33,17 +33,19 @@
             <TableColumn id="col_Depart" minWidth="2.6666259765625" prefWidth="104.66668701171875" text="Lieu de depart" />
             <TableColumn id="col_Arrive" minWidth="7.33331298828125" prefWidth="124.00006103515625" text="Lieu d'arrivée" />
             <TableColumn id="col_Duree" minWidth="6.6666259765625" prefWidth="117.33331298828125" text="Durée du trajet" />
-            <TableColumn minWidth="0.0" prefWidth="79.3333740234375" text="Nom" />
          </columns>
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
       </TableView>
-      <Button id="btSupprimer" layoutX="824.0" layoutY="88.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="97.0" style="-fx-background-color: red;" text="🗑Supprimer" textFill="#3a3232de">
+      <Button id="btSupprimer" layoutX="736.0" layoutY="88.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="97.0" style="-fx-background-color: #A50104;" text="🗑Supprimer" textFill="#e5e7e6de">
          <font>
-            <Font size="14.0" />
+            <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Button id="btModifier" layoutX="933.0" layoutY="88.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="97.0" style="-fx-background-color: #0f056b;" text="🖊 Modifier" textFill="WHITE" />
+      <Button id="btModifier" layoutX="844.0" layoutY="88.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="97.0" style="-fx-background-color: #276FBF;" text="🖊 Modifier" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
    </children>
 </AnchorPane>

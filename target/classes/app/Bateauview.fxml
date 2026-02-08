@@ -8,14 +8,17 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0" prefWidth="900.0" style="-fx-background-color: #748B75;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Text layoutX="343.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Listes de bateaux" wrappingWidth="396.8033752441406">
          <font>
             <Font name="System Bold" size="36.0" />
          </font>
       </Text>
-      <Button id="btAjouter" layoutX="513.0" layoutY="91.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="97.0" style="-fx-background-color: #1FC255;" text="➕ Ajouter " textFill="#085913" />
+      <Button id="btAjouter" layoutX="513.0" layoutY="91.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="97.0" style="-fx-background-color: #1FC255;" text="➕ Ajouter " textFill="#085913">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font></Button>
       <TableView layoutX="101.0" layoutY="135.0" prefHeight="350.0" prefWidth="733.0">
          <columns>
             <TableColumn id="col_ID" prefWidth="77.33332824707031" text="ID" />
@@ -26,11 +29,14 @@
          </columns>
       </TableView>
       <ComboBox layoutX="116.0" layoutY="95.0" prefWidth="150.0" promptText="filtre" />
-      <Button id="btSupprimer" layoutX="626.0" layoutY="91.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="97.0" style="-fx-background-color: red;" text="🗑Supprimer" textFill="#3a3232de">
+      <Button id="btSupprimer" focusTraversable="false" layoutX="626.0" layoutY="91.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="97.0" style="-fx-background-color: #A50104;" text="🗑Supprimer" textFill="#e5e7e6de">
          <font>
-            <Font size="14.0" />
+            <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Button id="btModifier" layoutX="740.0" layoutY="91.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="97.0" style="-fx-background-color: #0f056b;" text="🖊 Modifier" textFill="WHITE" />
+      <Button id="btModifier" layoutX="740.0" layoutY="91.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="97.0" style="-fx-background-color: #276FBF;" text="🖊 Modifier" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
    </children>
 </AnchorPane>

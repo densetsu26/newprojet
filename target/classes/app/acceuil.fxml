@@ -40,28 +40,28 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<HBox maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="513.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<HBox maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="513.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tg.ucao.uut.tp.poo.applications.MainController">
    <children>
-      <BorderPane prefHeight="200.0" prefWidth="200.0">
+      <BorderPane fx:id="mainBorderPane" prefHeight="200.0" prefWidth="200.0">
          <left>
             <AnchorPane id="contentpane" prefHeight="503.0" prefWidth="221.0" style="-fx-background-color: #2D3447;" BorderPane.alignment="CENTER">
                <children>
-                  <Button layoutX="11.0" layoutY="196.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="179.0" style="-fx-background-color: #3D668A; -fx-background-radius: 12;" text="🏠  Acceuil" textFill="WHITE" textOverrun="WORD_ELLIPSIS">
+                  <Button fx:id="btnAcceuil" layoutX="11.0" layoutY="196.0" mnemonicParsing="false" onAction="#handleShowAcceuil" prefHeight="46.0" prefWidth="179.0" style="-fx-background-color: #3D668A; -fx-background-radius: 12;" text="🏠  Acceuil" textFill="WHITE" textOverrun="WORD_ELLIPSIS">
                      <font>
                         <Font name="Comic Sans MS Bold" size="14.0" />
                      </font>
                   </Button>
-                  <Button layoutX="11.0" layoutY="257.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="179.0" style="-fx-background-color: #3D668A; -fx-background-radius: 12;" text="⛴ Bateaux" textFill="WHITE" textOverrun="WORD_ELLIPSIS">
+                  <Button fx:id="btnBateaux" layoutX="11.0" layoutY="257.0" mnemonicParsing="false" onAction="#handleShowBateaux" prefHeight="46.0" prefWidth="179.0" style="-fx-background-color: #3D668A; -fx-background-radius: 12;" text="⛴ Bateaux" textFill="WHITE" textOverrun="WORD_ELLIPSIS">
                      <font>
                         <Font name="Comic Sans MS Bold" size="14.0" />
                      </font>
                   </Button>
-                  <Button layoutX="11.0" layoutY="319.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="179.0" style="-fx-background-color: #3D668A; -fx-background-radius: 12;" text="🗺 Voyages" textFill="WHITE" textOverrun="WORD_ELLIPSIS">
+                  <Button fx:id="btnVoyages" layoutX="11.0" layoutY="319.0" mnemonicParsing="false" onAction="#handleShowVoyages" prefHeight="46.0" prefWidth="179.0" style="-fx-background-color: #3D668A; -fx-background-radius: 12;" text="🗺 Voyages" textFill="WHITE" textOverrun="WORD_ELLIPSIS">
                      <font>
                         <Font name="Comic Sans MS Bold" size="14.0" />
                      </font>
                   </Button>
-                  <Button layoutX="11.0" layoutY="381.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="179.0" style="-fx-background-color: #3D668A; -fx-background-radius: 12;" text="🎟 Tickets" textFill="WHITE" textOverrun="WORD_ELLIPSIS">
+                  <Button fx:id="btnTickets" layoutX="11.0" layoutY="381.0" mnemonicParsing="false" onAction="#handleShowTickets" prefHeight="46.0" prefWidth="179.0" style="-fx-background-color: #3D668A; -fx-background-radius: 12;" text="🎟 Tickets" textFill="WHITE" textOverrun="WORD_ELLIPSIS">
                      <font>
                         <Font name="Comic Sans MS Bold" size="14.0" />
                      </font>
@@ -79,7 +79,7 @@
             </AnchorPane>
          </left>
          <center>
-            <AnchorPane id="contentpane" prefHeight="513.0" prefWidth="1000.0" style="-fx-background-color: #211E1E;" BorderPane.alignment="CENTER" />
+            <AnchorPane id="contentpane" fx:id="contentPane" prefHeight="513.0" prefWidth="1000.0" style="-fx-background-color: #211E1E;" BorderPane.alignment="CENTER" />
          </center>
       </BorderPane>
    </children>

@@ -5,10 +5,8 @@
 package tg.ucao.uut.tp.poo.models;
 
 import java.time.Duration;
-import java.time.LocalDate;
-
+import tg.ucao.uut.tp.poo.dao.Column;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.Objects;
 
 
@@ -19,29 +17,30 @@ import java.util.Objects;
  * @author user
  */
 public class Voyage extends BaseModel{
-    private long id_Voyage;
+    @Column("id")
+    private long id;
+    @Column("depart")
     private String depart;
+    @Column("arrivee")
     private String arriver;
-    private LocalDateTime heureDebut;
-    private LocalDateTime heureFin;
-    private LocalDate dateDebut;
-    private LocalDate dateFin;
+    @Column("dateDebut")
+    private LocalDateTime dateDebut;
+    @Column("dateFin")
+    private LocalDateTime datefin;
     private Bateau bateau;
     public Duration calculerDurée(){
         Duration diff;
-        diff = Duration.between(heureDebut,heureFin);
+        diff = Duration.between(dateDebut,datefin);
         
         return diff;
     }
-    public Voyage(String depart,String arriver,LocalDate dateDebut, LocalDate dateFin,LocalDateTime HeureDebut, LocalDateTime HeureFin,Bateau bateau){
-        this.id_Voyage=+id;
+    public Voyage(int id,String depart,String arriver,LocalDateTime dateDebut, LocalDateTime datefin,Bateau bateau){
+        this.id=id;
         this.depart=depart;
         this.arriver=arriver;
         this.dateDebut= dateDebut;
-        this.dateFin= dateFin;
+        this.datefin= datefin;
         this.bateau=bateau;
-        this.heureFin= heureFin;
-        this.heureDebut= heureDebut;
         
         
     }
@@ -54,30 +53,14 @@ public class Voyage extends BaseModel{
      * @return the id
      */
     public Long getId_Voyage() {
-        return id_Voyage;
+        return id;
     }
 
     /**
      * @param id the id to set
      */
     public void setId_Voyage(int id) {
-        this.id_Voyage = id;
-    }
-
-    public LocalDateTime getHeureDebut() {
-        return heureDebut;
-    }
-
-    public void setHeureDebut(LocalDateTime heureDebut) {
-        this.heureDebut = heureDebut;
-    }
-
-    public LocalDateTime getHeureFin() {
-        return heureFin;
-    }
-
-    public void setHeureFin(LocalDateTime heureFin) {
-        this.heureFin = heureFin;
+        this.id = id;
     }
 
     /**
@@ -111,29 +94,29 @@ public class Voyage extends BaseModel{
     /**
      * @return the dateDebut
      */
-    public LocalDate getDateDebut() {
+    public LocalDateTime getDateDebut() {
         return dateDebut;
     }
 
     /**
      * @param dateDebut the dateDebut to set
      */
-    public void setDateDebut(LocalDate dateDebut) {
+    public void setDateDebut(LocalDateTime dateDebut) {
         this.dateDebut = dateDebut;
     }
 
     /**
      * @return the datefin
      */
-    public LocalDate getDatefin() {
-        return dateFin;
+    public LocalDateTime getDatefin() {
+        return datefin;
     }
 
     /**
      * @param datefin the datefin to set
      */
-    public void setDatefin(LocalDate datefin) {
-        this.dateFin = datefin;
+    public void setDatefin(LocalDateTime datefin) {
+        this.datefin = datefin;
     }
 
     /**
@@ -174,8 +157,6 @@ public class Voyage extends BaseModel{
         final Voyage other = (Voyage) obj;
         return Objects.equals(this.arriver, other.arriver);
     }
-    /*public Ticket editerTicket(){
-        return new Ticket();
-    }*/
+  
     
 }

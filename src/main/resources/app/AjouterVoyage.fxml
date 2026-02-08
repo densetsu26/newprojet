@@ -9,9 +9,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="389.0" style="-fx-background-radius: 12; -fx-background-color: #DBD9D9;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="389.0" style="-fx-background-radius: 12; -fx-background-color: #DBD9D9;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tg.ucao.uut.tp.poo.controllers.VoyageFormController">
    <children>
-      <Text layoutX="84.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ajouter un Voyage" wrappingWidth="226.8033676147461">
+      <Text fx:id="lblTitre" layoutX="84.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ajouter un Voyage" wrappingWidth="226.8033676147461">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>
@@ -33,6 +33,6 @@
       <Label layoutX="229.0" layoutY="211.0" prefHeight="25.0" prefWidth="103.0" text="Date d'arrivée" />
       <DatePicker layoutX="20.0" layoutY="236.0" prefHeight="25.0" prefWidth="127.0" />
       <DatePicker layoutX="224.0" layoutY="236.0" prefHeight="25.0" prefWidth="127.0" />
-      <Button layoutX="293.0" layoutY="407.0" mnemonicParsing="false" text="OK" />
+      <Button fx:id="btnEnregistrer" layoutX="293.0" layoutY="407.0" mnemonicParsing="false" onAction="#HandleEnregistrer" text="OK" />
    </children>
 </AnchorPane>

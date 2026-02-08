@@ -4,29 +4,25 @@
  */
 package tg.ucao.uut.tp.poo.models;
 
-import tg.ucao.uut.tp.poo.dao.Transient;
+import tg.ucao.uut.tp.poo.dao.Column;
 import java.util.Objects;
 
-import tg.ucao.uut.tp.poo.dao.Column;
-
-
 public class Bateau extends BaseModel {
-    @Transient()
-    public final static String[] FIELDS_NAMES = new String[] { "nom", "description", "numero_Siege", "capacite" };
-    @Transient()
-    public final static Class<?>[] FIELDS_CLASSES = new Class[] { String.class, String.class, String.class, Integer.class};
-    @Column("id")
-    private String numero;
+
     @Column("nom_bateau")
     private String nom;
+
     @Column("description")
     private String description;
-    @Column("numero_Siege")
+
+    @Column("numero_siege")
     private String numerotationSiege;
+
     @Column("capacite")
     private Integer capacite;
 
     public Bateau() {
+        super();
         this.capacite = 0;
     }
 
@@ -37,75 +33,45 @@ public class Bateau extends BaseModel {
         this.capacite = capacite;
     }
 
+    // Getters / Setters
+    public String getNom() { return nom; }
+    public void setNom(String nom) { this.nom = nom; }
+
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+
+    public String getNumerotationSiege() { return numerotationSiege; }
+    public void setNumerotationSiege(String numerotationSiege) { this.numerotationSiege = numerotationSiege; }
+
+    public Integer getCapacite() { return capacite; }
+    public void setCapacite(Integer capacite) { this.capacite = capacite; }
+
+    // Debug / Logs
     @Override
-    public Object[] toTableRow() {
-        return new Object[] {id, nom, description, numerotationSiege, capacite};
-    }
-    
-    public String getNom() {
-        return nom;
+    public String toString() {
+        return "Bateau{id=" + id + ", nom=" + nom + ", capacite=" + capacite + "}";
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public String getNumerotationSiege() {
-        return numerotationSiege;
-    }
-
-    public Integer getCapacite() {
-        return capacite;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setNumerotationSiege(String numerotationSiege) {
-        this.numerotationSiege = numerotationSiege;
-    }
-
-    public void setCapacite(Integer capacite) {
-        this.capacite = capacite;
-    }
-
-    public String getNumero() {
-        return numero;
-    }
-
-    public void setNumero(String numero) {
-        this.numero = numero;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Bateau)) return false;
+        Bateau bateau = (Bateau) o;
+        return Objects.equals(id, bateau.id);
     }
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 29 * hash + Objects.hashCode(this.nom);
-        return hash;
+        return Objects.hash(id);
     }
-
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Bateau other = (Bateau) obj;
-        return Objects.equals(this.nom, other.nom);
-    }
-
-    @Override
-    public String toString() {
-        return "Bateau{" + "nom=" + nom + ", description=" + description + ", numerotationSiege=" + numerotationSiege + ", capacite=" + capacite + '}';
-    }
+    public Object[] toTableRow() {
+        return new Object[]{
+        getId(), 
+        nom, 
+        description, 
+        numerotationSiege, 
+        capacite
+    };
+}
 }

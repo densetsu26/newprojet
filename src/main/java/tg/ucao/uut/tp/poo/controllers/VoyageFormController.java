@@ -1,116 +1,142 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package tg.ucao.uut.tp.poo.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import tg.ucao.uut.tp.poo.models.Bateau;
 import tg.ucao.uut.tp.poo.models.Voyage;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.fxml.Initializable;
-import javafx.stage.Stage;
+import tg.ucao.uut.tp.poo.modelsDAO.BateauDAO;
 import tg.ucao.uut.tp.poo.modelsDAO.VoyageDAO;
 
-public class VoyageFormController implements Initializable {
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
-    @FXML private Label lblTitre;
-    @FXML private Button btnEnregistrer;
-    @FXML private TextField tfDepart, tfArrivee, tfHeureDebut, tfHeureFin;
-    @FXML private DatePicker dpDateDebut, dpDateFin;
-    @FXML private ComboBox<Bateau> cbBateau;
-    
-   // private final VoyageDAO voyageDAO = new VoyageDAO();
-    private Voyage voyageToEdit; 
-    private boolean isUpdateMode = false;
+public class VoyageFormController {
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        // Optionnel : Configurer ici le format des DatePickers ou charger la liste des bateaux
-    }
+    @FXML private TextField tf_Depart;
+    @FXML private TextField tf_Destination;
+    @FXML private TextField tf_HeureDebut;
+    @FXML private TextField tf_HeureFin;
+    @FXML private DatePicker dp_DateDebut;
+    @FXML private DatePicker dp_DateFin;
+    @FXML private ComboBox<Bateau> cb_Bateau;
 
-    public void setVoyage(Voyage voyage) {
-        if (voyage != null) {
-            this.voyageToEdit = voyage;
-            this.isUpdateMode = true;
-            
-            lblTitre.setText("Modifier le Voyage n°" + voyage.getId());
-            btnEnregistrer.setText("Mettre à jour");
+    private Voyage voyageActuel;
+    private VoyageController parentController;
 
-            tfDepart.setText(voyage.getDepart());
-            tfArrivee.setText(voyage.getArriver());
-            
-            // Extraction de la date et de l'heure depuis le LocalDateTime du modèle
-            dpDateDebut.setValue(voyage.getDateDebut().toLocalDate());
-            tfHeureDebut.setText(voyage.getDateDebut().toLocalTime().toString());
-            
-            dpDateFin.setValue(voyage.getDatefin().toLocalDate());
-            tfHeureFin.setText(voyage.getDatefin().toLocalTime().toString());
-            
-            cbBateau.setValue(voyage.getBateau());
+    private final VoyageDAO voyageDAO = new VoyageDAO();
+    private final BateauDAO bateauDAO = new BateauDAO();
+
+
+    public void initData(Voyage v, VoyageController parent) {
+        this.voyageActuel = v;
+        this.parentController = parent;
+
+        cb_Bateau.getItems().setAll(bateauDAO.selectAll());
+
+        if (v != null) {
+            tf_Depart.setText(v.getDepart());
+            tf_Destination.setText(v.getDestination());
+
+            if (v.getDateDebut() != null) {
+                dp_DateDebut.setValue(v.getDateDebut().toLocalDate());
+                tf_HeureDebut.setText(v.getDateDebut().toLocalTime().toString());
+            }
+
+            if (v.getDateFin() != null) {
+                dp_DateFin.setValue(v.getDateFin().toLocalDate());
+                tf_HeureFin.setText(v.getDateFin().toLocalTime().toString());
+            }
+
+            cb_Bateau.setValue(v.getBateau());
         }
     }
 
     @FXML
     private void handleEnregistrer() {
+
         try {
-            // 1. Vérification que les dates sont sélectionnées
-            if (dpDateDebut.getValue() == null || dpDateFin.getValue() == null) {
-                showError("Champs manquants", "Veuillez sélectionner les dates de début et de fin.");
-                return;
+            if (!validerFormulaire()) return;
+
+            if (voyageActuel == null) {
+                voyageActuel = new Voyage();
             }
 
-            
-            LocalTime hDebut = LocalTime.parse(tfHeureDebut.getText());
-            LocalTime hFin = LocalTime.parse(tfHeureFin.getText());
+            voyageActuel.setDepart(tf_Depart.getText().trim());
+            voyageActuel.setDestination(tf_Destination.getText().trim());
 
-           
-            LocalDateTime debutComplet = LocalDateTime.of(dpDateDebut.getValue(), hDebut);
-            LocalDateTime finComplete = LocalDateTime.of(dpDateFin.getValue(), hFin);
+            LocalDate dDebut = dp_DateDebut.getValue();
+            LocalDate dFin = dp_DateFin.getValue();
+            LocalTime hDebut = LocalTime.parse(tf_HeureDebut.getText());
+            LocalTime hFin = LocalTime.parse(tf_HeureFin.getText());
 
-            if (isUpdateMode) {
-               
-                voyageToEdit.setDepart(tfDepart.getText());
-                voyageToEdit.setArriver(tfArrivee.getText());
-                voyageToEdit.setDateDebut(debutComplet);
-                voyageToEdit.setDatefin(finComplete);
-                voyageToEdit.setBateau(cbBateau.getValue());
-                
-                showInfo("Succès", "Le voyage a été mis à jour avec succès.");
+            voyageActuel.setDateDebut(LocalDateTime.of(dDebut, hDebut));
+            voyageActuel.setDateFin(LocalDateTime.of(dFin, hFin));
+
+            voyageActuel.setBateau(cb_Bateau.getValue());
+
+            if (voyageActuel.isNew()) {
+                voyageDAO.create(voyageActuel);
             } else {
-                
-                Voyage newVoyage = new Voyage(0, tfDepart.getText(), tfArrivee.getText(), debutComplet, finComplete, cbBateau.getValue());
-                // Ici, tu appellerais ton service DAO : voyageDao.save(nouveau);
-                showInfo("Succès", "Le nouveau voyage a été enregistré.");
+                voyageDAO.update(voyageActuel);
             }
 
-        } catch (DateTimeParseException e) {
-            showError("Format d'heure incorrect", "L'heure doit être au format HH:MM (ex: 08:30 ou 14:00).");
+            parentController.chargerDonnees();
+            fermerFenetre();
+
         } catch (Exception e) {
-            showError("Erreur inattendue", "Une erreur est survenue : " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur", e.getMessage());
         }
     }
 
-    
+    private boolean validerFormulaire() {
 
-    private void showError(String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Erreur");
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.showAndWait();
+        if (tf_Depart.getText().isBlank()
+                || tf_Destination.getText().isBlank()
+                || dp_DateDebut.getValue() == null
+                || dp_DateFin.getValue() == null
+                || tf_HeureDebut.getText().isBlank()
+                || tf_HeureFin.getText().isBlank()
+                || cb_Bateau.getValue() == null) {
+
+            showAlert(Alert.AlertType.WARNING, "Champs manquants",
+                    "Tous les champs sont obligatoires.");
+            return false;
+        }
+
+        LocalDateTime debut = LocalDateTime.of(
+                dp_DateDebut.getValue(),
+                LocalTime.parse(tf_HeureDebut.getText())
+        );
+
+        LocalDateTime fin = LocalDateTime.of(
+                dp_DateFin.getValue(),
+                LocalTime.parse(tf_HeureFin.getText())
+        );
+
+        if (fin.isBefore(debut)) {
+            showAlert(Alert.AlertType.WARNING, "Dates invalides",
+                    "La date de fin doit être postérieure à la date de début.");
+            return false;
+        }
+
+        return true;
     }
 
-    private void showInfo(String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information");
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.showAndWait();
+    private void fermerFenetre() {
+        ((Stage) tf_Depart.getScene().getWindow()).close();
     }
-       private void fermerFenetre() {
-        Stage stage = (Stage) btnEnregistrer.getScene().getWindow();
-        stage.close();
+
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

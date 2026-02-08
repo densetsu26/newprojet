@@ -12,93 +12,68 @@ import tg.ucao.uut.tp.poo.modelsDAO.BateauDAO;
 
 public class BateauFormController {
 
-    @FXML private Label lblTitre; // Pense à ajouter un fx:id="lblTitre" dans ton FXML
-    @FXML private TextField tfNom;
-    @FXML private TextField tfCapacite;
-    @FXML private TextArea taDescription;
-    @FXML private Button btnEnregistrer;
+    @FXML private TextField tf_Nom;
+    @FXML private TextField tf_cap;
+    @FXML private TextArea ta_Description;
+    @FXML private TextField tf_NumSiege;
 
-    private BateauDAO bateauDao = new BateauDAO();
-    
-    // Variables pour gérer le mode modification
-    private Bateau bateauToEdit;
-    private boolean isUpdateMode = false;
+    private Bateau bateauActuel;
+    private BateauController parentController;
+    private final BateauDAO bateauDAO = new BateauDAO();
 
-    /**
-     * Méthode appelée depuis la liste pour passer un bateau à modifier
-     */
-    public void setBateau(Bateau bateau) {
-        if (bateau != null) {
-            this.bateauToEdit = bateau;
-            this.isUpdateMode = true;
+    public void initData(Bateau b, BateauController parent) {
+        this.bateauActuel = b;
+        this.parentController = parent;
 
-            // Remplir les champs avec les données existantes
-            tfNom.setText(bateau.getNom());
-            tfCapacite.setText(String.valueOf(bateau.getCapacite()));
-            taDescription.setText(bateau.getDescription());
-
-            // Changer le texte de l'interface
-            if (lblTitre != null) lblTitre.setText("Modifier le bateau");
-            btnEnregistrer.setText("Mettre à jour");
+        if (b != null) {
+            tf_Nom.setText(b.getNom());
+            tf_cap.setText(String.valueOf(b.getCapacite()));
+            ta_Description.setText(b.getDescription());
+            tf_NumSiege.setText(b.getNumerotationSiege());
         }
     }
 
     @FXML
     private void handleEnregistrer() {
+        if (!validerSaisie()) return;
+
         try {
-            // 1. Validation
-            if (tfNom.getText().isEmpty() || tfCapacite.getText().isEmpty()) {
-                showAlert(Alert.AlertType.WARNING, "Champs vides", "Le nom et la capacité sont obligatoires.");
-                return;
-            }
+            if (bateauActuel == null) bateauActuel = new Bateau();
 
-            Integer capacite = Integer.parseInt(tfCapacite.getText());
+            bateauActuel.setNom(tf_Nom.getText());
+            bateauActuel.setCapacite(Integer.parseInt(tf_cap.getText()));
+            bateauActuel.setDescription(ta_Description.getText());
+            bateauActuel.setNumerotationSiege(tf_NumSiege.getText());
 
-            if (isUpdateMode) {
-                // --- MODE MODIFICATION ---
-                bateauToEdit.setNom(tfNom.getText());
-                bateauToEdit.setCapacite(capacite);
-                bateauToEdit.setDescription(taDescription.getText());
+            if (bateauActuel.isNew()) bateauDAO.create(bateauActuel);
+            else bateauDAO.update(bateauActuel);
 
-                // Appel au DAO (vérifie si c'est dbUpdate ou update dans ton BaseDBDAO)
-               // bateauDao.dbUpdate(bateauToEdit); 
-                
-                showAlert(Alert.AlertType.INFORMATION, "Succès", "Le bateau a été mis à jour !");
-            } else {
-                // --- MODE AJOUT ---
-                Bateau nouveauBateau = new Bateau(
-                    tfNom.getText(),
-                    taDescription.getText(),
-                    "Standard", 
-                    capacite
-                );
-
-                // Appel au DAO (dbInsert)
-                //bateauDao.dbInsert(nouveauBateau);
-
-                showAlert(Alert.AlertType.INFORMATION, "Succès", "Le bateau a été enregistré !");
-            }
-            
-            fermerFenetre();
-
-        } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de format", "La capacité doit être un nombre entier.");
+            parentController.chargerDonnees();
+            fermer();
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur BDD", "Erreur lors de l'opération : " + e.getMessage());
-            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Erreur : " + e.getMessage());
+            alert.showAndWait();
         }
     }
 
-    private void showAlert(Alert.AlertType type, String title, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+    @FXML
+    private void handleAnnuler() {
+        fermer();
     }
 
-    private void fermerFenetre() {
-        Stage stage = (Stage) btnEnregistrer.getScene().getWindow();
+    private boolean validerSaisie() {
+        if (tf_Nom.getText().isBlank() || tf_cap.getText().isBlank()) return false;
+        try {
+            int val = Integer.parseInt(tf_cap.getText());
+            if (val < 0) return false;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+
+    private void fermer() {
+        Stage stage = (Stage) tf_Nom.getScene().getWindow();
         stage.close();
     }
 }

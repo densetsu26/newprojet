@@ -4,101 +4,145 @@
  */
 package tg.ucao.uut.tp.poo.controllers;
 
-/**
- *
- * @author DELL
- */
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
-import java.time.format.DateTimeFormatter;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import tg.ucao.uut.tp.poo.models.Voyage;
+import tg.ucao.uut.tp.poo.modelsDAO.VoyageDAO;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import javafx.event.ActionEvent;
 
 public class VoyageController {
 
     @FXML private TableView<Voyage> tableVoyages;
-    @FXML private TableColumn<Voyage, Number> colId;
-    @FXML private TableColumn<Voyage, String> colBateau;
-    @FXML private TableColumn<Voyage, String> colDepart;
-    @FXML private TableColumn<Voyage, String> colArrivee;
-    @FXML private TableColumn<Voyage, Object> colDateHeureDepart;
-    @FXML private TableColumn<Voyage, Object> colDateHeureArrivee;
-    @FXML private TableColumn<Voyage, String> colDuree;
 
-    // Liste observable (si on ajoute un voyage, le tableau se met à jour tout seul)
-    private ObservableList<Voyage> voyageData = FXCollections.observableArrayList();
-    
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+    @FXML private TableColumn<Voyage, Long> col_ID;
+    @FXML private TableColumn<Voyage, String> col_Depart;
+    @FXML private TableColumn<Voyage, String> col_Arrive;
+    @FXML private TableColumn<Voyage, LocalDateTime> col_HeureDepart;
+    @FXML private TableColumn<Voyage, String> col_Bateau;
+
+    private final VoyageDAO voyageDAO = new VoyageDAO();
+    private final ObservableList<Voyage> voyageList = FXCollections.observableArrayList();
+
+    private final DateTimeFormatter formatter =
+            DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     @FXML
     public void initialize() {
-        // 1. Liaison des colonnes avec les Properties du modèle
-        //
-        //colId.setCellValueFactory(cellData -> cellData.getValue().idVoyageProperty());
-        //colDepart.setCellValueFactory(cellData -> cellData.getValue().departProperty());
-        //colArrivee.setCellValueFactory(cellData -> cellData.getValue().arriveeProperty());
-        
-        // 2. Formatage personnalisé pour le Bateau (on affiche son nom)
-        //colBateau.setCellValueFactory(cellData -> cellData.getValue().getBateau().nomProperty());
 
-        // 3. Formatage des dates pour l'affichage
-        colDateHeureDepart.setCellFactory(column -> new TableCell<>() {
+        col_ID.setCellValueFactory(c -> new javafx.beans.property.SimpleObjectProperty<>(c.getValue().getId()));
+        col_Depart.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getDepart()));
+        col_Arrive.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getDestination()));
+
+        // Formatage propre du LocalDateTime
+        col_HeureDepart.setCellFactory(column -> new TableCell<>() {
             @Override
-            protected void updateItem(Object item, boolean empty) {
+            protected void updateItem(LocalDateTime item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || getTableRow() == null || getTableRow().getItem() == null) {
-                    setText(null);
-                } else {
-                    setText(getTableRow().getItem().getDateDebut().format(formatter));
-                }
+                setText(empty || item == null ? null : item.format(formatter));
             }
         });
 
-        /*/ 4. Calcul de la durée à la volée
-        colDuree.setCellValueFactory(cellData -> {
-            long minutes = cellData.getValue().getDuree().toMinutes();
-            return new javafx.beans.property.SimpleStringProperty(minutes / 60 + "h " + minutes % 60 + "m");
-        });
-*/
-        // Charger les données (simulées pour l'instant)
+        col_HeureDepart.setCellValueFactory(c ->
+                new javafx.beans.property.SimpleObjectProperty<>(c.getValue().getDateDebut())
+        );
+
+        // Affichage du NOM du bateau
+        col_Bateau.setCellValueFactory(c ->
+                new javafx.beans.property.SimpleStringProperty(
+                        c.getValue().getBateau() != null
+                                ? c.getValue().getBateau().getNom()
+                                : "-"
+                )
+        );
+
         chargerDonnees();
     }
 
-    private void chargerDonnees() {
-        // Ici, tu appelleras ton DAO : voyageData.addAll(voyageDAO.findAll());
-        tableVoyages.setItems(voyageData);
+    public void chargerDonnees() {
+        voyageList.setAll(voyageDAO.selectAll());
+        tableVoyages.setItems(voyageList);
     }
 
     @FXML
     private void handleAjouter() {
-        System.out.println("Ouverture formulaire ajout...");
-        // Logique pour charger ajoutervoyage.fxml
+        ouvrirFormulaire(null);
     }
 
     @FXML
     private void handleModifier() {
         Voyage selected = tableVoyages.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            System.out.println("Modification de : " + selected.getId());
-        } else {
-            afficherAlerte("Selection", "Veuillez sélectionner un voyage à modifier.");
+        if (selected == null) {
+            showAlert("Sélection requise", "Veuillez sélectionner un voyage.");
+            return;
+        }
+        ouvrirFormulaire(selected);
+    }
+
+   @FXML
+    private void handleSupprimer(ActionEvent event) {
+    Voyage selected = tableVoyages.getSelectionModel().getSelectedItem();
+    
+    if (selected != null) {
+        try {
+            // On tente la suppression
+            voyageDAO.delete(selected.getId());
+            
+            // Si ça marche, on rafraîchit le tableau
+            chargerVoyages(); 
+            
+        } catch (java.sql.SQLException e) {
+            // Si la base de données refuse (ex: voyage lié à un ticket)
+            e.printStackTrace();
+            
+            // On affiche une petite boîte de message à l'utilisateur
+            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
+            alert.setTitle("Erreur de suppression");
+            alert.setHeaderText("Impossible de supprimer ce voyage");
+            alert.setContentText("Détail : " + e.getMessage());
+            alert.showAndWait();
+        }
+    }
+}
+
+
+    private void ouvrirFormulaire(Voyage voyage) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/tg/ucao/uut/tp/poo/views/AjouterVoyage.fxml")
+            );
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle(voyage == null ? "Ajouter un voyage" : "Modifier un voyage");
+            stage.setScene(new Scene(loader.load()));
+
+            VoyageFormController controller = loader.getController();
+            controller.initData(voyage, this);
+
+            stage.showAndWait();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    @FXML
-    private void handleSupprimer() {
-        Voyage selected = tableVoyages.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            voyageData.remove(selected);
-            // voyageDAO.delete(selected);
-        }
-    }
-
-    private void afficherAlerte(String titre, String message) {
+    private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(titre);
+        alert.setTitle(title);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    private void chargerVoyages() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

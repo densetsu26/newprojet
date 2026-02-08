@@ -10,106 +10,89 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author macbook
+ * Classe de base pour tous les modèles.
+ * Gère l'ID et la récupération dynamique des champs pour le DAO.
  */
 public abstract class BaseModel {
-    
+
     protected Long id;
-    //protected Object[] fields;
 
     public BaseModel() {
+        // Constructeur par défaut
     }
 
-    public BaseModel(Long pId) {
-        id = pId;
+    public BaseModel(Long id) {
+        this.id = id;
     }
 
-//    public void setFieldValueAt(int index, Object value) {
-//        fields[index] = value;
-//    }
-//
-//    public Object getFieldValueAt(int index) {
-//        return fields[index];
-//    }
-
+    /**
+     * Indique si l'objet est nouveau (pas encore persistant en BD)
+     */
     public boolean isNew() {
         return id == null;
     }
 
+    // =======================
+    // GETTERS / SETTERS
+    // =======================
     public Long getId() {
         return id;
-    }
-    
-    public Object[] getPersistFieldsVal() {
-        return getFieldsVal(false);
-    }
-    
-    public Object[] getFieldsVal() {
-        return getFieldsVal(true);
-    }
-    
-    public Object[] getFieldsVal(boolean takeTransients) {
-        //return fields;
-        List<Object> fieldValues = new ArrayList<>();
-
-        // Parcours des champs déclarés dans la classe (dans l'ordre de déclaration)
-        for (Field field : getFields(takeTransients)) {
-            // Rendre accessible les champs privés
-            field.setAccessible(true);
-
-            try {
-                // Ajoute la valeur du champ à la liste
-                fieldValues.add(field.get(this));
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException("Erreur lors de l'accès au champ : " + field.getName(), e);
-            }
-            field.setAccessible(false);
-        }
-
-        return fieldValues.toArray();
-    }
-    
-    public Field[] getPersistFields() {
-        return getFields(false);
-    }
-    
-    public Field[] getFields() {
-        return getFields(true);
-    }
-    
-    public Field[] getFields(boolean takeTransients) {
-        //return fields;
-        List<Field> fields = new ArrayList<>();
-
-        // Récupère la classe de l'objet courant (la classe fille)
-        Class<?> clazz = this.getClass();
-
-        // Parcours des champs déclarés dans la classe (dans l'ordre de déclaration)
-        for (Field field : clazz.getDeclaredFields()) {
-            // Ignorer le champ "id"
-            if (field.getName().equals("id")) {
-                continue;
-            }
-            // Ignorer les champs Transient
-            if(!takeTransients && field.isAnnotationPresent(Transient.class)) {
-                continue;
-            }
-            // Ajoute le champ à la liste
-            fields.add(field);
-        }
-
-        return fields.toArray(new Field[0]);
     }
 
     public void setId(Long id) {
         this.id = id;
     }
-    
-    public abstract Object[] toTableRow();
 
-//    public void setFields(Object[] fields) {
-//        this.fields = fields;
-//    }
-    
+    // =======================
+    // Champs dynamiques pour DAO
+    // =======================
+    public Object[] getPersistFieldsVal() {
+        return getFieldsVal(false);
+    }
+
+    public Object[] getFieldsVal() {
+        return getFieldsVal(true);
+    }
+
+    public Object[] getFieldsVal(boolean takeTransients) {
+        List<Object> values = new ArrayList<>();
+        for (Field field : getFields(takeTransients)) {
+            field.setAccessible(true);
+            try {
+                values.add(field.get(this));
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("Erreur accès champ : " + field.getName(), e);
+            } finally {
+                field.setAccessible(false);
+            }
+        }
+        return values.toArray();
+    }
+
+    public Field[] getPersistFields() {
+        return getFields(false);
+    }
+
+    public Field[] getFields() {
+        return getFields(true);
+    }
+
+    public Field[] getFields(boolean takeTransients) {
+        List<Field> fieldList = new ArrayList<>();
+        Class<?> clazz = this.getClass();
+
+        // Récupère uniquement les champs déclarés dans la classe fille
+        for (Field field : clazz.getDeclaredFields()) {
+            if ("id".equals(field.getName())) continue;        // Ignore l'ID
+            if (!takeTransients && field.isAnnotationPresent(Transient.class)) continue;
+            fieldList.add(field);
+        }
+
+        return fieldList.toArray(new Field[0]);
+    }
+
+    // =======================
+    // Méthode obligatoire pour TableView / DAO
+    // =======================
+    public abstract Object[] toTableRow();
 }

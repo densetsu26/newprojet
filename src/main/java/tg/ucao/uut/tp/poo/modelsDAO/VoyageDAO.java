@@ -14,7 +14,7 @@ import tg.ucao.uut.tp.poo.models.Voyage;
  */
 public class VoyageDAO extends BaseDBDAO<Voyage>{
     
-    public VoyageDAO(String pTableName) {
+    public VoyageDAO() {
         super("VoyageBD");
     }
     

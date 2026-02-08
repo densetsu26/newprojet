@@ -2,59 +2,64 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package tg.ucao.uut.tp.poo.applications;
-
-/**
- *
- * @author DELL
- */
+package tg.ucao.uut.tp.poo.controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-
+/**
+ * Contrôleur principal pour le layout avec menu et contenu central.
+ */
 public class MainController implements Initializable {
 
     @FXML
     private BorderPane mainBorderPane;
 
-   
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         handleShowAcceuil();
     }
 
     /**
-     * Méthode générique pour charger une vue FXML dans le centre du BorderPane
+     * Charge un fichier FXML dans le centre du BorderPane
      */
     private void loadView(String fxmlFile) {
         try {
-            // Chargement du fichier FXML
-            // Note : vérifie bien le chemin (ex: "/views/Acceuil.fxml")
-            Parent root = FXMLLoader.load(getClass().getResource("/app/" + fxmlFile + ".fxml"));
-            
-            // On l'injecte au centre
+            URL resource = getClass().getResource("/tg/ucao/uut/tp/poo/views/" + fxmlFile + ".fxml");
+            if (resource == null) {
+                showError("Fichier introuvable", "Impossible de charger : " + fxmlFile + ".fxml");
+                return;
+            }
+
+            Parent root = FXMLLoader.load(resource);
             mainBorderPane.setCenter(root);
-            
+
         } catch (IOException e) {
-            System.err.println("Erreur : Impossible de charger la vue " + fxmlFile);
-        } catch (NullPointerException e) {
-            System.err.println("Erreur : Fichier " + fxmlFile + ".fxml non trouvé. Vérifiez le chemin.");
+            showError("Erreur FXML", "Impossible de charger : " + fxmlFile + ".fxml\n" + e.getMessage());
         }
     }
 
-    // --- Gestion des clics sur les boutons ---
+    private void showError(String titre, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(titre);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    // --- Actions menu ---
 
     @FXML
     private void handleShowAcceuil() {
-        loadView("MotBienvenue"); // Remplace par le nom exact de ton fichier FXML
+        loadView("MotBienvenue"); // Doit correspondre au FXML exact
     }
 
     @FXML

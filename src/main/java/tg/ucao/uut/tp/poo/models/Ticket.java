@@ -4,101 +4,101 @@
  */
 package tg.ucao.uut.tp.poo.models;
 
-
-
-
 import tg.ucao.uut.tp.poo.dao.Column;
+import tg.ucao.uut.tp.poo.dao.Transient;
 
 /**
- *
- * @author user
+ * Modèle métier Ticket
+ * Représente un ticket associé à un voyage
  */
 public class Ticket extends BaseModel {
-    @Column("id")
-    private int numero;
-    @Column("numSiege")
-    private int numSiege;
-    private String nomClient; 
+
+    @Column("nom_client")
+    private String nomClient;
+
+    @Column("prenom_client")
     private String prenomClient;
-    private Voyage voyage ;
 
-     public Ticket(String nom,String prenom,Bateau bateau,int s){
-        
-        this.id++;
-        this.nomClient=nom;
-        this.prenomClient=prenom;
-        this.numSiege=s;
+    @Column("num_siege")
+    private int numeroSiege;
+
+    @Column("voyage_id")
+    private Long voyageId; // Persisté en base
+
+    @Transient
+    private Voyage voyage; // Utilisé uniquement pour l'affichage
+
+    public Ticket() {
+        super();
     }
 
-    public int getNumero() {
-        return numero;
-    }
+    public Ticket(String nomClient, String prenomClient, Voyage voyage, int numeroSiege) {
+        this.nomClient = nomClient;
+        this.prenomClient = prenomClient;
+        this.numeroSiege = numeroSiege;
+        this.setVoyage(voyage); // Utilise le setter pour bien remplir voyageId
+}
+
 
     public String getNomClient() {
         return nomClient;
+    }
+
+    public void setNomClient(String nomClient) {
+        this.nomClient = nomClient;
     }
 
     public String getPrenomClient() {
         return prenomClient;
     }
 
-  
-
-    public void setNomClient(String nomClient) {
-        this.nomClient = nomClient;
-    }
-
     public void setPrenomClient(String prenomClient) {
         this.prenomClient = prenomClient;
     }
-    
-    
-    public void setNumero(int id) {
-        this.numero = id;
+
+    public int getNumeroSiege() {
+        return numeroSiege;
     }
 
-    /**
-     * @return the numSiege
-     */
-    public int getNumSiege() {
-        return numSiege;
+    public void setNumeroSiege(int numeroSiege) {
+        this.numeroSiege = numeroSiege;
     }
 
-    /**
-     * @param numSiege the numSiege to set
-     */
-    public void setNumSiege(int numSiege) {
-        this.numSiege = numSiege;
+    public Long getVoyageId() {
+        return voyageId;
     }
 
-    
-
- 
-
-
-   
-  
-
-    public void generePDF() {
+    public void setVoyageId(Long voyageId) {
+        this.voyageId = voyageId;
     }
 
-    @Override
-    public Object[] toTableRow() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    /**
-     * @return the voyage
-     */
     public Voyage getVoyage() {
         return voyage;
     }
 
     /**
-     * @param voyage the voyage to set
+     * Synchronise automatiquement voyageId avec l'objet Voyage
      */
-    public void setVoyage(Voyage voyage) {
+    public final void setVoyage(Voyage voyage) {
         this.voyage = voyage;
+        if (voyage != null) {
+            this.voyageId = voyage.getId();
+        }
     }
 
+    /**
+     * Utilisé pour les TableView JavaFX (optionnel)
+     */
+    @Override
+    public Object[] toTableRow() {
+        return new Object[]{
+            getId(),
+            nomClient,
+            prenomClient,
+            numeroSiege,
+            voyage != null
+                ? voyage.getDepart() + " → " + voyage.getDestination()
+                : "—"
+        };
+    }
 }

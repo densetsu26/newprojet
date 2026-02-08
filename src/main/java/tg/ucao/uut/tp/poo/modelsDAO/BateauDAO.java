@@ -14,8 +14,7 @@ import tg.ucao.uut.tp.poo.models.Bateau;
 public class BateauDAO extends BaseDBDAO<Bateau>{
 
     public BateauDAO() {
-        super(
-                "bateau"); // Nom de table
+        super("bateau"); // Nom de table
         
     }
     

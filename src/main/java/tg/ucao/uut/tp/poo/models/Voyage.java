@@ -4,159 +4,146 @@
  */
 package tg.ucao.uut.tp.poo.models;
 
-import java.time.Duration;
 import tg.ucao.uut.tp.poo.dao.Column;
+import tg.ucao.uut.tp.poo.dao.Transient;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+public class Voyage extends BaseModel {
 
-
-
-/**
- *
- * @author user
- */
-public class Voyage extends BaseModel{
-    @Column("id")
-    private long id;
     @Column("depart")
     private String depart;
+
     @Column("arrivee")
-    private String arriver;
-    @Column("dateDebut")
+    private String destination;
+
+    @Column("DateDebut")
     private LocalDateTime dateDebut;
+
     @Column("dateFin")
-    private LocalDateTime datefin;
+    private LocalDateTime dateFin;
+
+    // Clé étrangère stockée en base
+    @Column("id_bateau")
+    private Long bateauId;
+
+    // Objet métier utilisé côté UI uniquement
+    @Transient
     private Bateau bateau;
-    public Duration calculerDurée(){
-        Duration diff;
-        diff = Duration.between(dateDebut,datefin);
-        
-        return diff;
-    }
-    public Voyage(int id,String depart,String arriver,LocalDateTime dateDebut, LocalDateTime datefin,Bateau bateau){
-        this.id=id;
-        this.depart=depart;
-        this.arriver=arriver;
-        this.dateDebut= dateDebut;
-        this.datefin= datefin;
-        this.bateau=bateau;
-        
-        
-    }
-    @Override
-    public Object[] toTableRow() {
-        return new Object[]{getId(), getDepart(), getArriver(), getDateDebut(), getDatefin(), getBateau()};
+
+  
+    public Voyage() {
+        super();
     }
 
-    /**
-     * @return the id
-     */
-    public Long getId_Voyage() {
-        return id;
+    public Voyage(
+            String depart,
+            String destination,
+            LocalDateTime dateDebut,
+            LocalDateTime dateFin,
+            Bateau bateau
+    ) {
+        this.depart = depart;
+        this.destination = destination;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
+        setBateau(bateau);
     }
 
-    /**
-     * @param id the id to set
-     */
-    public void setId_Voyage(int id) {
-        this.id = id;
-    }
-
-    /**
-     * @return the depart
-     */
+  
     public String getDepart() {
         return depart;
     }
 
-    /**
-     * @param depart the depart to set
-     */
     public void setDepart(String depart) {
         this.depart = depart;
     }
 
-    /**
-     * @return the arriver
-     */
-    public String getArriver() {
-        return arriver;
+    public String getDestination() {
+        return destination;
     }
 
-    /**
-     * @param arriver the arriver to set
-     */
-    public void setArriver(String arriver) {
-        this.arriver = arriver;
+    public void setDestination(String destination) {
+        this.destination = destination;
     }
 
-    /**
-     * @return the dateDebut
-     */
     public LocalDateTime getDateDebut() {
         return dateDebut;
     }
 
-    /**
-     * @param dateDebut the dateDebut to set
-     */
     public void setDateDebut(LocalDateTime dateDebut) {
         this.dateDebut = dateDebut;
     }
 
-    /**
-     * @return the datefin
-     */
-    public LocalDateTime getDatefin() {
-        return datefin;
+    public LocalDateTime getDateFin() {
+        return dateFin;
     }
 
-    /**
-     * @param datefin the datefin to set
-     */
-    public void setDatefin(LocalDateTime datefin) {
-        this.datefin = datefin;
+    public void setDateFin(LocalDateTime dateFin) {
+        this.dateFin = dateFin;
     }
 
-    /**
-     * @return the bateau
-     */
+    public Long getBateauId() {
+        return bateauId;
+    }
+
+    public void setBateauId(Long bateauId) {
+        this.bateauId = bateauId;
+    }
+
     public Bateau getBateau() {
         return bateau;
     }
 
-    /**
-     * @param bateau the bateau to set
-     */
     public void setBateau(Bateau bateau) {
         this.bateau = bateau;
+        if (bateau != null) {
+            this.bateauId = bateau.getId();
+        }
     }
 
-    /**
-     *
-     * @return
-     */
+    public boolean estValide() {
+        return depart != null
+                && destination != null
+                && dateDebut != null
+                && dateFin != null
+                && dateDebut.isBefore(dateFin)
+                && bateauId != null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Voyage)) return false;
+        Voyage other = (Voyage) o;
+        return Objects.equals(getId(), other.getId());
+    }
+
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 29 * hash + Objects.hashCode(this.arriver);
-        return hash;
+        return Objects.hash(getId());
     }
-      @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Voyage other = (Voyage) obj;
-        return Objects.equals(this.arriver, other.arriver);
+    
+    @Override
+    public String toString() {
+        return depart + " → " + destination + " (" + dateDebut.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM HH:mm")) + ")";
+}
+
+    @Override
+    public Object[] toTableRow() {
+        return new Object[]{
+                getId(),
+                depart,
+                destination,
+                dateDebut,
+                dateFin,
+                bateau != null ? bateau.getNom() : null
+        };
     }
-  
     
 }
+
+
+
+  
